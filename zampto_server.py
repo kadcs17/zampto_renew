@@ -3,6 +3,7 @@ import time
 import traceback
 from flask import Flask, request, jsonify
 from playwright.sync_api import sync_playwright
+export HTTP_PROXY="https://72.213.88.134:443"
 
 app = Flask(__name__)
 
@@ -19,6 +20,17 @@ def renew_zampto(email, password, domain):
 
         context = browser.new_context()
         page = context.new_page()
+def renew_zampto(email, password, domain):
+    # ✅ 新增代理设置
+    proxy_server = os.getenv("HTTP_PROXY")
+    proxy = {"server": proxy_server} if proxy_server else None
+
+    with sync_playwright() as p:
+        # ✅ 加上 proxy 参数
+        browser = p.chromium.launch(headless=True, proxy=proxy)
+        context = browser.new_context()
+        page = context.new_page()
+
 
         try:
             print(f"[*] 打开 Zampto 登录页面...")
